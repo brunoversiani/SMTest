@@ -6,4 +6,11 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\SMTest.Domain.csproj" />
+    <ProjectReference Include="..\SMTest.API\SMTest.API.csproj" />
+    <ProjectReference Include="..\SMTest.Application\SMTest.Application.csproj" />
+    <ProjectReference Include="..\SMTest.Infrastructure\SMTest.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
