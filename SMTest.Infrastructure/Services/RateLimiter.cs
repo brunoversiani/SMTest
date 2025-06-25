@@ -23,6 +23,7 @@ namespace SMTest.Infrastructure.Services
 
         public async Task<bool> CanCreateUrl(User user)
         {
+            //Check how many URLs were created by the user
             var limit = await _dbContext.UserDailyLimits
                 .FirstOrDefaultAsync(l => l.UserId == user.Id);
 
@@ -46,6 +47,7 @@ namespace SMTest.Infrastructure.Services
                 await _dbContext.SaveChangesAsync();
             }
 
+            //Return if the user can still create URLs
             return limit.Count < MaxUrlsPerDay;
         }
 

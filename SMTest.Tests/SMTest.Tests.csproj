@@ -7,10 +7,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="RateLimiterTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Domain\SMTest.Domain.csproj" />
     <ProjectReference Include="..\SMTest.API\SMTest.API.csproj" />
     <ProjectReference Include="..\SMTest.Application\SMTest.Application.csproj" />
     <ProjectReference Include="..\SMTest.Infrastructure\SMTest.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="8.4.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="Moq" Version="4.20.72" />
+    <PackageReference Include="xunit" Version="2.9.3" />
   </ItemGroup>
 
 </Project>

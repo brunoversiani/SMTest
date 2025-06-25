@@ -78,16 +78,6 @@ namespace SMTest.API.Controllers
             }
         }
 
-        //[Authorize]
-        //[HttpGet("urls")]
-        //public async Task<IActionResult> GetUserUrls()
-        //{
-        //    var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        //    var query = new GetUserUrlsQuery { UserId = userId };
-        //    var result = await _mediator.Send(query);
-        //    return Ok(result);
-        //}
-
         [Authorize]
         [HttpGet("urls")]
         public async Task<IActionResult> GetUserUrls()
@@ -159,6 +149,25 @@ namespace SMTest.API.Controllers
                 }
             }
         }
+
+        [Authorize]
+        [HttpDelete("urls/{shortCode}")]
+        public async Task<IActionResult> DeleteShortCode(string shortCode)
+        {
+            var user = await GetUserAsync();
+            if (user == null) return Unauthorized();
+
+            var url = await _context.ShortUrls
+                .FirstOrDefaultAsync(u => u.ShortCode == shortCode && u.UserId == user.Id);
+
+            if (url == null) return NotFound();
+
+            _context.ShortUrls.Remove(url);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
         private static string GenerateShortCode()
         {
             return Guid.NewGuid().ToString("N")[..6];

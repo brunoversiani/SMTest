@@ -25,6 +25,33 @@ namespace SMTest.API.Controllers
             _authService = authService;
             _signInManager = signInManager;
         }
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (await _userManager.Users.AnyAsync(x => x.Email == request.Email))
+                return Conflict(new { Message = "Email already registered" });
+
+            var user = new User
+            {
+                Email = request.Email,
+                UserName = request.Email  // Using email as username
+            };
+
+            var createResult = await _userManager.CreateAsync(user, request.Password);
+            if (!createResult.Succeeded)
+            {
+                return BadRequest(new
+                {
+                    Message = "Registration failed",
+                    Errors = createResult.Errors.Select(e => e.Description)
+                });
+            }
+
+            return Ok(new { Message = "Registration successful" });
+        }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
@@ -53,33 +80,7 @@ namespace SMTest.API.Controllers
             });
         }
 
-        [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            if (await _userManager.Users.AnyAsync(x => x.Email == request.Email))
-                return Conflict(new { Message = "Email already registered" });
-
-            var user = new User
-            {
-                Email = request.Email,
-                UserName = request.Email  // Using email as username
-            };
-
-            var createResult = await _userManager.CreateAsync(user, request.Password);
-            if (!createResult.Succeeded)
-            {
-                return BadRequest(new
-                {
-                    Message = "Registration failed",
-                    Errors = createResult.Errors.Select(e => e.Description)
-                });
-            }
-
-            return Ok(new { Message = "Registration successful" });
-        }
+       
     }
 
 }
